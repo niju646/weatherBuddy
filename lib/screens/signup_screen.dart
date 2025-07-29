@@ -134,67 +134,123 @@ class SignupScreen extends StatelessWidget {
                         CommonButton(
                           buttonname: 'SignUp',
                           onPressed: () async {
-                            // Replace with your actual login logic
-                            if (passwordcontroller.text.isNotEmpty &&
-                                namecontroller.text.isNotEmpty &&
-                                emailcontroller.text.isNotEmpty) {
-                              context.read<AuthProvider>().signupAuth(
-                                namecontroller.text.trim(),
-                                emailcontroller.text.trim(),
-                                passwordcontroller.text.trim(),
+                            final authProvider = context.read<AuthProvider>();
+
+                            await authProvider.signupAuth(
+                              namecontroller.text.trim(),
+                              emailcontroller.text.trim(),
+                              passwordcontroller.text.trim(),
+                            );
+
+                            if (authProvider.isLoggedin) {
+                              GoRouter.of(
+                                context,
+                              ).pushNamed(MyAppConstants().homeRoute);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  content: Text("Signup Successful"),
+                                  backgroundColor: const Color.fromARGB(
+                                    255,
+                                    93,
+                                    163,
+                                    95,
+                                  ).withAlpha(204),
+                                ),
                               );
-                              final isLoggedIn = context
-                                  .read<AuthProvider>()
-                                  .isLoggedin;
-                              if (isLoggedIn) {
-                                GoRouter.of(
-                                  context,
-                                ).pushNamed(MyAppConstants().homeRoute);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 10,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    content: Text("Login Successfull"),
-                                    backgroundColor: Color.fromARGB(
-                                      255,
-                                      93,
-                                      163,
-                                      95,
-                                    ).withAlpha(204),
+                            } else {
+                              final error =
+                                  authProvider.error ?? "Signup failed";
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
                                   ),
-                                );
-                              } else {
-                                final error =
-                                    context.read<AuthProvider>().error ??
-                                    "Signup failed";
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 10,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    content: Text(error),
-                                    backgroundColor: Color.fromARGB(
-                                      255,
-                                      201,
-                                      79,
-                                      71,
-                                    ).withAlpha(204),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                );
-                              }
+                                  content: Text(error),
+                                  backgroundColor: const Color.fromARGB(
+                                    255,
+                                    201,
+                                    79,
+                                    71,
+                                  ).withAlpha(204),
+                                ),
+                              );
                             }
                           },
+                          // onPressed: () async {
+                          //   // Replace with your actual login logic
+                          //   // if (passwordcontroller.text.isNotEmpty &&
+                          //   //     namecontroller.text.isNotEmpty &&
+                          //   //     emailcontroller.text.isNotEmpty) {
+                          //   context.read<AuthProvider>().signupAuth(
+                          //     namecontroller.text.trim(),
+                          //     emailcontroller.text.trim(),
+                          //     passwordcontroller.text.trim(),
+                          //   );
+                          //   final isLoggedIn = context
+                          //       .read<AuthProvider>()
+                          //       .isLoggedin;
+                          //   if (isLoggedIn) {
+                          //     GoRouter.of(
+                          //       context,
+                          //     ).pushNamed(MyAppConstants().homeRoute);
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       SnackBar(
+                          //         behavior: SnackBarBehavior.floating,
+                          //         margin: const EdgeInsets.symmetric(
+                          //           horizontal: 20,
+                          //           vertical: 10,
+                          //         ),
+                          //         shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(16),
+                          //         ),
+                          //         content: Text("Login Successfull"),
+                          //         backgroundColor: Color.fromARGB(
+                          //           255,
+                          //           93,
+                          //           163,
+                          //           95,
+                          //         ).withAlpha(204),
+                          //       ),
+                          //     );
+                          //   } else {
+                          //     final error =
+                          //         context.read<AuthProvider>().error ??
+                          //         "Signup failed";
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       SnackBar(
+                          //         behavior: SnackBarBehavior.floating,
+                          //         margin: const EdgeInsets.symmetric(
+                          //           horizontal: 20,
+                          //           vertical: 10,
+                          //         ),
+                          //         shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(16),
+                          //         ),
+                          //         content: Text(error),
+                          //         backgroundColor: Color.fromARGB(
+                          //           255,
+                          //           201,
+                          //           79,
+                          //           71,
+                          //         ).withAlpha(204),
+                          //       ),
+                          //     );
+                          //   }
+                          //   // }
+                          // },
                         ),
                         const SizedBox(height: 20),
                         GestureDetector(

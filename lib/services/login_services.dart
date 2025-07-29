@@ -41,34 +41,25 @@ class LoginServices {
   }
 
   Future<void> signup(String username, String email, String password) async {
-    log('start');
-    log(
-      'Sending login data: ${{"username": username, "email": email, "password": password}}',
-    );
-
     try {
       final response = await _dio.post(
-        '/auth/signup',
-        data: {"username": username, "email": email, "password": password},
+        'auth/signup',
+        data: {'username': username, 'email': email, 'password': password},
       );
-      log(response.data.toString());
 
-      final token = response.data['token'];
+      final data = response.data;
 
-      if (token != null) {
-        await _secureStorage.write(key: 'auth_token', value: token);
-        await _secureStorage.write(key: 'username', value: username);
-        await _secureStorage.write(key: 'email', value: email);
+      if (response.statusCode == 201 && data['token'] != null) {
+        await _secureStorage.write(key: 'auth_token', value: data['token']);
+        await _secureStorage.write(key: 'username', value: data['username']);
+        await _secureStorage.write(key: 'email', value: data['email']);
+        log("✅ Signup successful. Token stored.");
       } else {
-        throw Exception("token not found");
+        throw Exception("Signup failed: No token in response");
       }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        log('Error data: ${e.response?.data}');
-        throw Exception(e.response?.data['message'] ?? 'Something went wrong');
-      } else {
-        throw Exception('Network error');
-      }
+    } catch (e) {
+      log("Signup error: $e");
+      rethrow;
     }
   }
 

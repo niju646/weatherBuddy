@@ -19,7 +19,7 @@ class MyAppRouter {
       final isOnLogin = state.matchedLocation == '/login';
       final isOnSignup = state.matchedLocation == '/signup';
       if (!isLoggedIn && !isOnLogin && !isOnSignup) {
-        return '/login';
+        return '/';
       } else if (isLoggedIn && (isOnLogin || isOnSignup)) {
         return '/home';
       }
