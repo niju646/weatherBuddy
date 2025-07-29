@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 import 'package:weather_buddy/model/weather_model.dart';
+import 'package:weather_buddy/urls/baseurl.dart';
 // import 'weather_model.dart';
 
 class WeatherService {
   static final Dio dio = Dio();
   static final DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
-  static Future<List<WeatherData>> fetchWeather({DateTime? startDate, DateTime? endDate}) async {
+  static Future<List<WeatherData>> fetchWeather({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
     try {
       developer.log(
         "fetchWeather() called${startDate != null ? ' for ${dateFormat.format(startDate)} to ${dateFormat.format(endDate!)}' : ''}",
@@ -25,11 +29,15 @@ class WeatherService {
       };
 
       final response = await dio.get(
-        'https://api.thingspeak.com/channels/2929062/feeds.json',
+        // 'https://api.thingspeak.com/channels/2929062/feeds.json',
+        Urls.baseurl,
         queryParameters: queryParameters,
       );
 
-      developer.log("Response received: ${response.data['feeds'].length} entries", name: 'WeatherService');
+      developer.log(
+        "Response received: ${response.data['feeds'].length} entries",
+        name: 'WeatherService',
+      );
 
       final List<dynamic> feeds = response.data['feeds'] ?? [];
       if (feeds.isNotEmpty) {
@@ -42,7 +50,10 @@ class WeatherService {
         return [];
       }
     } catch (e, stackTrace) {
-      developer.log("fetchWeather() error: $e\n$stackTrace", name: 'WeatherService');
+      developer.log(
+        "fetchWeather() error: $e\n$stackTrace",
+        name: 'WeatherService',
+      );
       return [];
     }
   }

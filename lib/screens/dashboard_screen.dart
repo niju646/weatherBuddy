@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:weather_buddy/model/weather_model.dart';
-// import 'package:weather_buddy/widgets/shimmer_loader.dart';
+
 import 'package:weather_buddy/providers/weather_provider.dart';
 import 'package:weather_buddy/widgets/graph_widget.dart';
 import 'dart:ui';
@@ -108,11 +108,6 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<WeatherProvider>(context);
-    final weather = provider.dataList.isNotEmpty
-        ? provider.dataList.last
-        : null;
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -124,69 +119,88 @@ class _DashboardScreenState extends State<DashboardScreen>
           ),
         ),
         child: SafeArea(
-          child: provider.isLoading
-              ? const ShimmerLoader()
-              : weather == null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.white.withOpacity(0.8),
-                        size: 40,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Failed to load weather data. Please try again.',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 16,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(20.0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        _buildAppBar(),
+                        const SizedBox(height: 24),
+                        // _buildWeatherHeader(weather),
+                        const SizedBox(height: 24),
+                        _buildCalendar(),
+                        Consumer<WeatherProvider>(
+                          builder: (context, provider, _) {
+                            final weather = provider.dataList.isNotEmpty
+                                ? provider.dataList.last
+                                : null;
+                            return provider.isLoading
+                                ? const ShimmerLoader()
+                                : weather == null
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.error_outline,
+                                          color: Colors.white.withOpacity(0.8),
+                                          size: 40,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          'Failed to load weather data. Please try again.',
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(
+                                              0.8,
+                                            ),
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        ElevatedButton(
+                                          onPressed: () => provider.fetchData(
+                                            selectedDate: selectedDate,
+                                          ),
+                                          child: const Text('Retry'),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : _refreshSection(weather);
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () =>
-                            provider.fetchData(selectedDate: selectedDate),
-                        child: const Text('Retry'),
-                      ),
-                    ],
-                  ),
-                )
-              : FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: CustomScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.all(20.0),
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate([
-                              _buildAppBar(),
-                              const SizedBox(height: 24),
-                              _buildWeatherHeader(weather),
-                              const SizedBox(height: 24),
-                              _buildCalendar(),
-                              const SizedBox(height: 24),
-                              _buildSectionTitle("Weather Overview"),
-                              const SizedBox(height: 16),
-                              _buildWeatherOverview(weather),
-                              const SizedBox(height: 32),
-                              _buildSectionTitle("Charts & Analytics"),
-                              const SizedBox(height: 16),
-                              _buildChartsGrid(),
-                              const SizedBox(height: 20),
-                            ]),
-                          ),
-                        ),
-                      ],
+                      ]),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _refreshSection(WeatherData? weather) {
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        _buildSectionTitle("Weather Overview"),
+        const SizedBox(height: 16),
+        _buildWeatherOverview(weather),
+        const SizedBox(height: 32),
+        _buildSectionTitle("Charts & Analytics"),
+        const SizedBox(height: 16),
+        _buildChartsGrid(),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
@@ -278,92 +292,6 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildWeatherHeader(WeatherData? weather) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Current Weather",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white.withOpacity(0.9),
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        weather?.field1 != null
-                            ? "${double.tryParse(weather!.field1!)?.toStringAsFixed(1) ?? 'N/A'}°C"
-                            : "N/A",
-                        style: const TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        DateFormat('EEEE, MMMM d').format(DateTime.now()),
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withOpacity(0.8),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        DateFormat('HH:mm').format(DateTime.now()),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.7),
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(
-                        Icons.wb_cloudy_outlined,
-                        size: 60,
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
