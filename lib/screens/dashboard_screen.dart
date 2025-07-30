@@ -236,6 +236,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 const Text(
                   "Weather Buddy",
                   style: TextStyle(
+                    fontFamily: 'PermanentMarker',
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
@@ -254,7 +255,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                   "Stay informed, stay prepared",
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withAlpha(230),
+
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.3,
                   ),
@@ -328,7 +330,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                 titleTextStyle: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withAlpha(230),
+
                   letterSpacing: 0.5,
                 ),
               ),
@@ -339,19 +342,23 @@ class _DashboardScreenState extends State<DashboardScreen>
                   fontWeight: FontWeight.w500,
                 ),
                 defaultTextStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withAlpha(230),
+
                   fontWeight: FontWeight.w500,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withAlpha(77),
+
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
                 ),
                 todayDecoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withAlpha(51),
+
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withAlpha(128),
+
                     width: 2,
                   ),
                 ),
@@ -427,10 +434,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                   filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withAlpha(26),
+
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha(51),
+
                         width: 1,
                       ),
                     ),
@@ -449,7 +458,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.15),
+                                  color: Colors.white.withAlpha(38),
+
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Icon(
@@ -473,7 +483,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withAlpha(204),
+
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.3,
                                 ),
@@ -522,10 +533,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                   filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withAlpha(26),
+
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha(51),
+
                         width: 1,
                       ),
                     ),
@@ -543,7 +556,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withAlpha(230),
+
                                     letterSpacing: 0.3,
                                   ),
                                 ),
@@ -554,10 +568,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withAlpha(26),
+
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: Colors.white.withOpacity(0.3),
+                                    color: Colors.white.withAlpha(77),
                                   ),
                                 ),
                                 child: DropdownButton<String>(
@@ -637,9 +652,7 @@ class ShimmerLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(
-          Colors.white.withOpacity(0.7),
-        ),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white.withAlpha(179)),
       ),
     );
   }

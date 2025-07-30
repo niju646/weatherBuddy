@@ -57,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                         const Text(
                           'Welcome Back!',
                           style: TextStyle(
+                            fontFamily: 'PermanentMarker',
                             fontWeight: FontWeight.bold,
                             fontSize: 28,
                             color: Colors.white,

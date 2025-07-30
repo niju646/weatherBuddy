@@ -266,6 +266,7 @@ class _StartupPageState extends State<StartupPage>
             const Text(
               'Weather Buddy',
               style: TextStyle(
+                fontFamily: 'PermanentMarker',
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,

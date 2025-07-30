@@ -51,11 +51,19 @@ class _SearchbyLocationState extends State<SearchbyLocation> {
             children: [
               const SizedBox(height: 40),
               const Text(
-                'Select District',
+                'Search By Location',
                 style: TextStyle(
                   color: Colors.white,
+                  fontFamily: 'PermanentMarker',
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black38,
+                        offset: Offset(2, 3),
+                        blurRadius: 6,
+                      ),
+                    ],
                 ),
               ),
               const SizedBox(height: 40),
@@ -122,9 +130,11 @@ class _SearchbyLocationState extends State<SearchbyLocation> {
                 ),
               ),
               const SizedBox(height: 30),
-              Text(
-                'comming soon',
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+              Center(
+                child: Text(
+                  'comming soon',
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
               const Spacer(),
             ],

@@ -16,10 +16,10 @@ class MyAppRouter {
     redirect: (context, state) async {
       final token = await _secureStorage.read(key: "auth_token");
       final isLoggedIn = token != null;
-      final isOnLogin = state.matchedLocation == '/login';
+      final isOnLogin = state.matchedLocation == '/';
       final isOnSignup = state.matchedLocation == '/signup';
       if (!isLoggedIn && !isOnLogin && !isOnSignup) {
-        return '/';
+        return '/login';
       } else if (isLoggedIn && (isOnLogin || isOnSignup)) {
         return '/home';
       }
